@@ -15,7 +15,7 @@ const props = defineProps<{
   canvasScale: number
 }>()
 
-// 吸附对齐线的位置
+// 吸附对齐线的Position
 const left = computed(() => props.axis.x * props.canvasScale + 'px')
 const top = computed(() => props.axis.y * props.canvasScale + 'px')
 

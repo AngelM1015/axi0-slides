@@ -29,7 +29,7 @@ export default () => {
 
   const isAudienceMode = new URLSearchParams(window.location.search).get('mode') === 'audience'
 
-  // 非观众模式：创建广播频道，向观众视图发送指令并响应状态请求
+  // 非观众模式: 创建广播频道, 向Audience view发送指令并响应状态请求
   let syncChannel: BroadcastChannel | null = null
   if (!isAudienceMode) {
     syncChannel = new BroadcastChannel(AUDIENCE_SYNC_CHANNEL)
@@ -47,29 +47,29 @@ export default () => {
     }
   }
 
-  // 当前页的元素动画执行到的位置
+  // Current slide的元素Animation执行到的Position
   const animationIndex = ref(0)
 
-  // 动画执行状态
+  // Animation执行状态
   const inAnimation = ref(false)
 
-  // 最小已播放页面索引
+  // 最Small已Play页面索引
   const playedSlidesMinIndex = ref(slideIndex.value)
 
-  // 执行元素动画
+  // 执行元素Animation
   const runAnimation = () => {
-    // 正在执行动画时，禁止其他新的动画开始
+    // 正在执行Animation时, 禁止Other新的AnimationStart
     if (inAnimation.value) return
 
     const { animations, autoNext } = formatedAnimations.value[animationIndex.value]
     animationIndex.value += 1
 
-    // 标记开始执行动画
+    // 标记Start执行Animation
     inAnimation.value = true
 
     let endAnimationCount = 0
 
-    // 依次执行该位置中的全部动画
+    // 依次执行该PositionMedium的AllAnimation
     for (const animation of animations) {
       const elRef: HTMLElement | null = document.querySelector(`#screen-element-${animation.elId} [class^=base-element-]`)
       if (!elRef) {
@@ -79,24 +79,24 @@ export default () => {
 
       const animationName = `${ANIMATION_CLASS_PREFIX}${animation.effect}`
       
-      // 执行动画前先清除原有的动画状态（如果有）
+      // 执行Animation前先清除原有的Animation状态 (如果有)
       elRef.style.removeProperty('--animate-duration')
       for (const classname of elRef.classList) {
         if (classname.indexOf(ANIMATION_CLASS_PREFIX) !== -1) elRef.classList.remove(classname, `${ANIMATION_CLASS_PREFIX}animated`)
       }
       
-      // 执行动画
+      // 执行Animation
       elRef.style.setProperty('--animate-duration', `${animation.duration}ms`)
       elRef.classList.add(animationName, `${ANIMATION_CLASS_PREFIX}animated`)
 
-      // 执行动画结束，将“退场”以外的动画状态清除
+      // 执行AnimationEnd, 将"Exit"以外的Animation状态清除
       const handleAnimationEnd = () => {
         if (animation.type !== 'out') {
           elRef.style.removeProperty('--animate-duration')
           elRef.classList.remove(animationName, `${ANIMATION_CLASS_PREFIX}animated`)
         }
 
-        // 判断该位置上的全部动画都已经结束后，标记动画执行完成，并尝试继续向下执行（如果有需要）
+        // 判断该Position上的AllAnimation都已经End后, 标记Animation执行完成, 并尝试继续向下执行 (如果有需要)
         endAnimationCount += 1
         if (endAnimationCount === animations.length) {
           inAnimation.value = false
@@ -115,9 +115,9 @@ export default () => {
     }
   })
 
-  // 恢复已执行过的退场动画的 DOM 终态（用于观众视图初始化同步）
-  // 入场动画的可见性由 animationIndex + needWaitAnimation 计算属性控制，无须额外处理
-  // 强调动画无持久效果，也无须处理
+  // Restore已执行过的ExitAnimation的 DOM 终态 (用于Audience view初始化同步)
+  // EntranceAnimation的可见性由 animationIndex + needWaitAnimation 计算属性控制, None须额外处理
+  // EmphasisAnimationNone持久效果, 也None须处理
   const restoreAnimationState = (targetIndex: number) => {
     for (let i = 0; i < targetIndex && i < formatedAnimations.value.length; i++) {
       const { animations } = formatedAnimations.value[i]
@@ -132,7 +132,7 @@ export default () => {
     }
   }
 
-  // 撤销元素动画，除了将索引前移外，还需要清除动画状态
+  // Undo元素Animation, 除了将索引前移外, 还需要清除Animation状态
   const revokeAnimation = () => {
     animationIndex.value -= 1
     const { animations } = formatedAnimations.value[animationIndex.value]
@@ -147,11 +147,11 @@ export default () => {
       }
     }
 
-    // 如果撤销时该位置有且仅有强调动画，则继续执行一次撤销
+    // 如果Undo时该Position有且仅有EmphasisAnimation, 则继续执行一次Undo
     if (animations.every(item => item.type === 'attention')) execPrev(false)
   }
 
-  // 关闭自动播放
+  // CloseAutoPlay
   const autoPlayTimer = ref(0)
   const closeAutoPlay = () => {
     if (autoPlayTimer.value) {
@@ -161,7 +161,7 @@ export default () => {
   }
   onUnmounted(closeAutoPlay)
 
-  // 循环放映
+  // Loop show
   const loopPlay = ref(false)
   const setLoopPlay = (loop: boolean) => {
     loopPlay.value = loop
@@ -171,10 +171,10 @@ export default () => {
     message.success(msg)
   }, 1000, { leading: true, trailing: false })
 
-  // 向上/向下播放
-  // 遇到元素动画时，优先执行动画播放，无动画则执行翻页
-  // 向上播放遇到动画时，仅撤销到动画执行前的状态，不需要反向播放动画
-  // 撤回到上一页时，若该页从未播放过（意味着不存在动画状态），需要将动画索引置为最小值（初始状态），否则置为最大值（最终状态）
+  // 向上/向下Play
+  // 遇到元素Animation时, 优先执行AnimationPlay, NoneAnimation则执行翻页
+  // 向上Play遇到Animation时, 仅Undo到Animation执行前的状态, 不需要反向PlayAnimation
+  // 撤回到Previous slide时, 若该页从未Play过 (意味着不存在Animation状态), 需要将Animation索引置为最SmallValue (初始状态), 否则置为最LargeValue (最终状态)
   const execPrev = (broadcast = true) => {
     if (broadcast) syncChannel?.postMessage({ type: 'EXEC_PREV' } as SyncMessage)
     if (formatedAnimations.value.length && animationIndex.value > 0) {
@@ -190,7 +190,7 @@ export default () => {
     }
     else {
       if (loopPlay.value) turnSlideToIndex(slides.value.length - 1)
-      else throttleMassage('已经是第一页了')
+      else throttleMassage('Already at the first slide')
     }
     inAnimation.value = false
   }
@@ -207,18 +207,18 @@ export default () => {
     else {
       if (loopPlay.value) turnSlideToIndex(0)
       else {
-        throttleMassage('已经是最后一页了')
+        throttleMassage('Already at the last slide')
         closeAutoPlay()
       }
       inAnimation.value = false
     }
   }
 
-  // 自动播放
+  // AutoPlay
   const autoPlayInterval = ref(2500)
   const autoPlay = () => {
     closeAutoPlay()
-    message.success('开始自动放映')
+    message.success('Start auto-play')
     autoPlayTimer.value = setInterval(execNext, autoPlayInterval.value)
   }
 
@@ -279,7 +279,7 @@ export default () => {
     syncChannel?.close()
   })
 
-  // 切换到上一张/上一张幻灯片（无视元素的入场动画）
+  // Transitions到上一张/上一张Slides (None视元素的EntranceAnimation)
   const turnPrevSlide = () => {
     slidesStore.updateSlideIndex(slideIndex.value - 1)
     animationIndex.value = 0
@@ -289,7 +289,7 @@ export default () => {
     animationIndex.value = 0
   }
 
-  // 切换幻灯片到指定的页面
+  // TransitionsSlides到指定的页面
   const turnSlideToIndex = (index: number) => {
     syncChannel?.postMessage({ type: 'TURN_TO_INDEX', index } as SyncMessage)
     slidesStore.updateSlideIndex(index)
@@ -304,7 +304,7 @@ export default () => {
     }
   }
 
-  // 激光笔状态与位置广播
+  // Laser pointer状态与Position广播
   const laserPen = ref(false)
 
   const handleLaserMove = (e: MouseEvent) => {
@@ -316,7 +316,7 @@ export default () => {
     syncChannel?.postMessage({ type: 'LASER_PEN_MOVE', x, y } as SyncMessage)
   }
 
-  // 节流版本的 handleLaserMove
+  // Section流版本的 handleLaserMove
   const throttledHandleLaserMove = throttle(handleLaserMove, 30, { leading: true, trailing: true })
 
   watch(laserPen, active => {

@@ -6,8 +6,8 @@ export const getTableRowHeight = (rowHeights: number[] | undefined, rowIndex: nu
 }
 
 /**
- * 计算单元格样式
- * @param style 单元格文本样式原数据
+ * 计算单元格Style
+ * @param style 单元格TextStyle原数据
  */
 export const getCellStyle = (outline: PPTElementOutline, style?: TableCellStyle): CSSProperties => {
   return {
@@ -19,8 +19,8 @@ export const getCellStyle = (outline: PPTElementOutline, style?: TableCellStyle)
 }
 
 /**
- * 计算单元格文本样式
- * @param style 单元格文本样式原数据
+ * 计算单元格TextStyle
+ * @param style 单元格TextStyle原数据
  */
 export const getTextStyle = (cellMinHeight: number, style?: TableCellStyle): CSSProperties => {
   if (!style) return {}

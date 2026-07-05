@@ -32,7 +32,7 @@ const exitScreening = () => {
   _exitScreening()
 }
 
-// 快捷键退出放映（观众视图中 ESC 不响应，由用户直接关闭窗口）
+// 快捷键Exit slide show (Audience viewMedium ESC 不响应, 由用户直接Close窗口)
 const keydownListener = (e: KeyboardEvent) => {
   const key = e.key.toUpperCase()
   if (key === KEYS.ESC) exitScreening()

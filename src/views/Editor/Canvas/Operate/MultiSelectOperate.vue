@@ -55,19 +55,19 @@ const range = ref({
   maxY: 0,
 })
 
-// 根据多选元素整体在画布中的范围，计算边框线和缩放点的位置信息
+// 根据Multi-select元素整体在画布Medium的范围, 计算Border线和ZoomPoint的Position信息
 const width = computed(() => (range.value.maxX - range.value.minX) * canvasScale.value)
 const height = computed(() => (range.value.maxY - range.value.minY) * canvasScale.value)
 const { resizeHandlers, borderLines } = useCommonOperate(width, height)
 
-// 计算多选元素整体在画布中的范围
+// 计算Multi-select元素整体在画布Medium的范围
 const setRange = () => {
   const { minX, maxX, minY, maxY } = getElementListRange(localActiveElementList.value)
   range.value = { minX, maxX, minY, maxY }
 }
 watchEffect(setRange)
 
-// 禁用多选状态下缩放：仅未旋转的图片和形状可以在多选状态下缩放
+// disabledMulti-select状态下Zoom: 仅未Rotate的Image和Shape可以在Multi-select状态下Zoom
 const disableResize = computed(() => {
   return localActiveElementList.value.some(item => {
     if (

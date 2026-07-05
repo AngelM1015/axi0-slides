@@ -29,8 +29,8 @@ interface IdMap {
 }
 
 /**
- * 计算元素在画布中的矩形范围旋转后的新位置范围
- * @param element 元素的位置大小和旋转角度信息
+ * 计算元素在画布Medium的Rectangle范围Rotate后的新Position范围
+ * @param element 元素的PositionLargeSmall和Rotate角度信息
  */
 export const getRectRotatedRange = (element: RotatedElementData) => {
   const { left, top, width, height, rotate = 0 } = element
@@ -64,8 +64,8 @@ export const getRectRotatedRange = (element: RotatedElementData) => {
 }
 
 /**
- * 计算元素在画布中的矩形范围旋转后的新位置与旋转之前位置的偏离距离
- * @param element 元素的位置大小和旋转角度信息
+ * 计算元素在画布Medium的Rectangle范围Rotate后的新Position与Rotate之前Position的偏离距离
+ * @param element 元素的PositionLargeSmall和Rotate角度信息
  */
 export const getRectRotatedOffset = (element: RotatedElementData) => {
   const { xRange: originXRange, yRange: originYRange } = getRectRotatedRange({
@@ -89,7 +89,7 @@ export const getRectRotatedOffset = (element: RotatedElementData) => {
 }
 
 /**
- * 计算元素在画布中的位置范围
+ * 计算元素在画布Medium的Position范围
  * @param element 元素信息
  */
 export const getElementRange = (element: PPTElement) => {
@@ -119,7 +119,7 @@ export const getElementRange = (element: PPTElement) => {
 }
 
 /**
- * 计算一组元素在画布中的位置范围
+ * 计算一组元素在画布Medium的Position范围
  * @param elementList 一组元素信息
  */
 export const getElementListRange = (elementList: PPTElement[]) => {
@@ -147,8 +147,8 @@ export const getElementListRange = (elementList: PPTElement[]) => {
 const ROTATABLE_GROUP_ELEMENT_TYPES = ['text', 'image', 'shape', 'line']
 
 /**
- * 判断当前选中的元素是否为同一个组合的完整成员
- * @param elements 选中的元素列表
+ * 判断当前选Medium的元素是否为同一个Group的完整成员
+ * @param elements 选Medium的元素列表
  */
 export const isSingleGroupSelection = (elements: PPTElement[]) => {
   if (elements.length < 2) return false
@@ -160,8 +160,8 @@ export const isSingleGroupSelection = (elements: PPTElement[]) => {
 }
 
 /**
- * 判断当前组合是否允许执行统一旋转
- * @param elements 组合成员列表
+ * 判断当前Group是否允许执行统一Rotate
+ * @param elements Group成员列表
  */
 export const canRotateGroupElements = (elements: PPTElement[]) => {
   if (!isSingleGroupSelection(elements)) return false
@@ -174,9 +174,9 @@ export const canRotateGroupElements = (elements: PPTElement[]) => {
 }
 
 /**
- * 计算一组元素整体范围的中心点
+ * 计算一组元素整体范围的Medium心Point
  * @param elements 元素列表
- * @param rotate 组合整体的旋转参照角度，会先按该角度对齐后再计算中心点
+ * @param rotate Group整体的Rotate参照角度, 会先By该角度对齐后再计算Medium心Point
  */
 export const getGroupElementCenter = (elements: PPTElement[], rotate = 0) => {
   const { minX, maxX, minY, maxY } = getElementListRangeByRotate(elements, rotate)
@@ -191,8 +191,8 @@ export const getGroupElementCenter = (elements: PPTElement[], rotate = 0) => {
 }
 
 /**
- * 计算矩形类元素四个顶点在画布中的绝对坐标
- * @param element 矩形类元素
+ * 计算Rectangle类元素四个顶Point在画布Medium的绝对Position
+ * @param element Rectangle类元素
  */
 const getRectElementPoints = (element: Exclude<PPTElement, PPTLineElement>) => {
   const center = {
@@ -212,8 +212,8 @@ const getRectElementPoints = (element: Exclude<PPTElement, PPTLineElement>) => {
 }
 
 /**
- * 计算线条元素用于范围计算的绝对坐标列表
- * @param element 线条元素
+ * 计算Line元素用于范围计算的绝对Position列表
+ * @param element Line元素
  */
 const getAbsoluteLinePointList = (element: PPTLineElement) => {
   const points = getAbsoluteLinePoints(element)
@@ -221,9 +221,9 @@ const getAbsoluteLinePointList = (element: PPTLineElement) => {
 }
 
 /**
- * 按指定整体旋转参照角度对齐后，计算元素列表的范围
+ * By指定整体Rotate参照角度对齐后, 计算元素列表的范围
  * @param elements 元素列表
- * @param rotate 组合整体的旋转参照角度
+ * @param rotate Group整体的Rotate参照角度
  */
 const getElementListRangeByRotate = (elements: PPTElement[], rotate: number) => {
   const xValues: number[] = []
@@ -256,10 +256,10 @@ export const normalizeAngle = (angle: number) => {
 }
 
 /**
- * 计算一个点绕指定中心点旋转后的坐标
- * @param point 目标点
- * @param center 旋转中心点
- * @param angle 旋转角度
+ * 计算一个Point绕指定Medium心PointRotate后的Position
+ * @param point 目标Point
+ * @param center RotateMedium心Point
+ * @param angle Rotate角度
  */
 export const rotatePoint = (point: Point, center: Point, angle: number): Point => {
   const radian = angle * Math.PI / 180
@@ -273,10 +273,10 @@ export const rotatePoint = (point: Point, center: Point, angle: number): Point =
 }
 
 /**
- * 旋转矩形类元素：通过旋转元素中心点并叠加自身旋转角度实现
+ * RotateRectangle类元素: 通过Rotate元素Medium心Point并叠加自身Rotate角度实现
  * @param element 元素
- * @param center 组合旋转中心点
- * @param angle 旋转角度
+ * @param center GroupRotateMedium心Point
+ * @param angle Rotate角度
  */
 export const rotateRectLikeElement = (element: Exclude<PPTElement, PPTLineElement>, center: Point, angle: number) => {
   const elementCenter = {
@@ -294,8 +294,8 @@ export const rotateRectLikeElement = (element: Exclude<PPTElement, PPTLineElemen
 }
 
 /**
- * 将线条元素的点位转换为画布中的绝对坐标
- * @param element 线条元素
+ * 将Line元素的Point位转换为画布Medium的绝对Position
+ * @param element Line元素
  */
 const getAbsoluteLinePoints = (element: PPTLineElement): AbsoluteLinePoints => {
   const toAbsolutePoint = (point: [number, number]) => ({
@@ -322,10 +322,10 @@ const getAbsoluteLinePoints = (element: PPTLineElement): AbsoluteLinePoints => {
 }
 
 /**
- * 将线条元素的全部绝对点位绕指定中心点旋转
- * @param points 线条绝对点位
- * @param center 组合旋转中心点
- * @param angle 旋转角度
+ * 将Line元素的All绝对Point位绕指定Medium心PointRotate
+ * @param points Line绝对Point位
+ * @param center GroupRotateMedium心Point
+ * @param angle Rotate角度
  */
 const rotateAbsoluteLinePoints = (points: AbsoluteLinePoints, center: Point, angle: number): AbsoluteLinePoints => {
   const rotated: AbsoluteLinePoints = {
@@ -347,9 +347,9 @@ const rotateAbsoluteLinePoints = (points: AbsoluteLinePoints, center: Point, ang
 }
 
 /**
- * 根据旋转后的绝对点位重建线条元素
- * @param element 原线条元素
- * @param points 旋转后的绝对点位
+ * 根据Rotate后的绝对Point位重建Line元素
+ * @param element 原Line元素
+ * @param points Rotate后的绝对Point位
  */
 const rebuildLineElement = (element: PPTLineElement, points: AbsoluteLinePoints): PPTLineElement => {
   const allPoints = [points.start, points.end]
@@ -391,10 +391,10 @@ const rebuildLineElement = (element: PPTLineElement, points: AbsoluteLinePoints)
 }
 
 /**
- * 旋转线条元素：将全部控制点旋转后重建线条数据
- * @param element 线条元素
- * @param center 组合旋转中心点
- * @param angle 旋转角度
+ * RotateLine元素: 将All控制PointRotate后重建Line数据
+ * @param element Line元素
+ * @param center GroupRotateMedium心Point
+ * @param angle Rotate角度
  */
 export const rotateLineElement = (element: PPTLineElement, center: Point, angle: number) => {
   const absolutePoints = getAbsoluteLinePoints(element)
@@ -422,7 +422,7 @@ export interface AlignLine {
 }
 
 /**
- * 将一组对齐吸附线进行去重：同位置的的多条对齐吸附线仅留下一条，取该位置所有对齐吸附线的最大值和最小值为新的范围
+ * 将一组对齐吸附线进行去重: 同Position的的多条对齐吸附线仅留下一条, 取该Position所有对齐吸附线的最LargeValue和最SmallValue为新的范围
  * @param lines 一组对齐吸附线信息
  */
 export const uniqAlignLines = (lines: AlignLine[]) => {
@@ -443,8 +443,8 @@ export const uniqAlignLines = (lines: AlignLine[]) => {
 }
 
 /**
- * 以页面列表为基础，为每一个页面生成新的ID，并关联到旧ID形成一个字典
- * 主要用于页面元素时，维持数据中各处页面ID原有的关系
+ * 以页面列表为基础, 为每一个页面Generate新的ID, 并Off联到旧ID形成一个字典
+ * 主要用于页面元素时, 维持数据Medium各处页面ID原有的Off系
  * @param slides 页面列表
  */
 export const createSlideIdMap = (slides: Slide[]) => {
@@ -456,9 +456,9 @@ export const createSlideIdMap = (slides: Slide[]) => {
 }
 
 /**
-   * 以元素列表为基础，为每一个元素生成新的ID，并关联到旧ID形成一个字典
-   * 主要用于复制元素时，维持数据中各处元素ID原有的关系
-   * 例如：原本两个组合的元素拥有相同的groupId，复制后依然会拥有另一个相同的groupId
+   * 以元素列表为基础, 为每一个元素Generate新的ID, 并Off联到旧ID形成一个字典
+   * 主要用于Copy元素时, 维持数据Medium各处元素ID原有的Off系
+   * 例如: 原本两个Group的元素拥有相同的groupId, Copy后依然会拥有另一个相同的groupId
    * @param elements 元素列表数据
    */
 export const createElementIdMap = (elements: PPTElement[]) => {
@@ -478,8 +478,8 @@ export const createElementIdMap = (elements: PPTElement[]) => {
 }
 
 /**
- * 根据表格的主题色，获取对应用于配色的子颜色
- * @param themeColor 主题色
+ * 根据Table的Theme色, 获取对应用于配色的子Color
+ * @param themeColor Theme色
  */
 export const getTableSubThemeColor = (themeColor: string) => {
   const rgba = tinycolor(themeColor)
@@ -490,8 +490,8 @@ export const getTableSubThemeColor = (themeColor: string) => {
 }
 
 /**
- * 获取线条元素路径字符串
- * @param element 线条元素
+ * 获取Line元素路径字符串
+ * @param element Line元素
  */
 export const getLineElementPath = (element: PPTLineElement) => {
   const start = element.start.join(',')
@@ -519,9 +519,9 @@ export const getLineElementPath = (element: PPTLineElement) => {
 }
 
 /**
- * 根据线条端点类型和线宽，计算渲染时线身需要向内收缩的距离
- * @param point 线条端点类型
- * @param width 线条宽度
+ * 根据Line端PointType和线宽, 计算渲染时线身需要向内收缩的距离
+ * @param point Line端PointType
+ * @param width Line宽度
  */
 const getLinePointRetractionOffset = (point: LinePoint, width: number) => {
   const size = width < 2 ? 2 : width
@@ -531,9 +531,9 @@ const getLinePointRetractionOffset = (point: LinePoint, width: number) => {
 }
 
 /**
- * 计算两个线条点位之间的距离
- * @param p1 第一个点
- * @param p2 第二个点
+ * 计算两个LinePoint位between的距离
+ * @param p1 第一个Point
+ * @param p2 第二个Point
  */
 const getLinePointDistance = (p1: [number, number], p2: [number, number]) => {
   const deltaX = p2[0] - p1[0]
@@ -542,9 +542,9 @@ const getLinePointDistance = (p1: [number, number], p2: [number, number]) => {
 }
 
 /**
- * 按指定偏移距离，将线条点位沿目标点方向平移
- * @param point 当前点
- * @param target 目标点
+ * By指定偏移距离, 将LinePoint位沿目标Point方向平移
+ * @param point 当前Point
+ * @param target 目标Point
  * @param offset 偏移距离
  */
 const getLinePointByOffset = (
@@ -563,8 +563,8 @@ const getLinePointByOffset = (
 }
 
 /**
- * 获取线条在路径起点和终点处对应的相邻控制点，用于计算端点内缩方向
- * @param element 线条元素
+ * 获取Line在路径起Point和终Point处对应的相邻控制Point, 用于计算端Point内缩方向
+ * @param element Line元素
  */
 const getLinePathTurningPoints = (element: PPTLineElement) => {
   if (element.broken) return [element.broken]
@@ -589,9 +589,9 @@ const getLinePathTurningPoints = (element: PPTLineElement) => {
 }
 
 /**
- * 获取线条元素用于实际渲染的路径字符串：
- * 保持端点 marker 仍对齐原始 start/end，仅将可见线身在两端按需向内收缩
- * @param element 线条元素
+ * 获取Line元素用于实际渲染的路径字符串: 
+ * 保持端Point marker 仍对齐原始 start/end, 仅将可见线身在两端By需向内收缩
+ * @param element Line元素
  */
 export const getLineElementRenderPath = (element: PPTLineElement) => {
   const turningPoints = getLinePathTurningPoints(element)

@@ -10,7 +10,7 @@ export default (canvasRef: ShallowRef<HTMLElement | null>) => {
   const { canvasPercentage, canvasDragged } = storeToRefs(mainStore)
   const { viewportRatio, viewportSize } = storeToRefs(useSlidesStore())
 
-  // 初始化画布可视区域的位置
+  // 初始化画布可视区域的Position
   const initViewportPosition = () => {
     if (!canvasRef.value) return
     const canvasWidth = canvasRef.value.clientWidth
@@ -30,7 +30,7 @@ export default (canvasRef: ShallowRef<HTMLElement | null>) => {
     }
   }
 
-  // 更新画布可视区域的位置
+  // 更新画布可视区域的Position
   const setViewportPosition = (newValue: number, oldValue: number) => {
     if (!canvasRef.value) return
     const canvasWidth = canvasRef.value.clientWidth
@@ -60,17 +60,17 @@ export default (canvasRef: ShallowRef<HTMLElement | null>) => {
     }
   }
 
-  // 可视区域缩放或比例变化时，重置/更新可视区域的位置
+  // 可视区域Zoom或比例变化时, Reset/更新可视区域的Position
   watch(canvasPercentage, setViewportPosition)
   watch(viewportRatio, initViewportPosition)
   watch(viewportSize, initViewportPosition)
 
-  // 画布拖拽状态改变（复原）时，重置可视区域的位置
+  // 画布拖拽状态改变 (复原)时, Reset可视区域的Position
   watch(canvasDragged, () => {
     if (!canvasDragged.value) initViewportPosition()
   })
 
-  // 画布可视区域位置和大小的样式
+  // 画布可视区域Position和LargeSmall的Style
   const viewportStyles = computed(() => ({
     width: viewportSize.value,
     height: viewportSize.value * viewportRatio.value,
@@ -78,7 +78,7 @@ export default (canvasRef: ShallowRef<HTMLElement | null>) => {
     top: viewportTop.value,
   }))
 
-  // 监听画布尺寸发生变化时，重置可视区域的位置
+  // 监听画布尺寸发生变化时, Reset可视区域的Position
   const resizeObserver = new ResizeObserver(initViewportPosition)
 
   onMounted(() => {

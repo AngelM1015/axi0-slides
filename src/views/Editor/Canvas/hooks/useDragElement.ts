@@ -34,7 +34,7 @@ export default (
     const originElementList: PPTElement[] = JSON.parse(JSON.stringify(elementList.value))
     let originActiveElementList = originElementList.filter(el => activeElementIdList.value.includes(el.id))
 
-    // 拖拽目标元素和初始属性声明，Ctrl+拖拽复制时会替换为副本元素及其属性
+    // 拖拽目标元素和初始属性声明, Ctrl+拖拽Copy时会Replace为副本元素及其属性
     let dragTargetElement = element
     let elOriginLeft = element.left
     let elOriginTop = element.top
@@ -46,16 +46,16 @@ export default (
     const startPageY = isTouchEvent ? e.changedTouches[0].pageY : e.pageY
 
     let isMisoperation: boolean | null = null
-    let duplicateTriggered = false // 标记是否已触发 Ctrl+拖拽复制
+    let duplicateTriggered = false // 标记是否已触发 Ctrl+拖拽Copy
 
     const isActiveGroupElement = element.id === activeGroupElementId.value
 
-    // 单元素拖拽：仅选中一个元素，或正在操作组合中的激活成员
+    // 单元素拖拽: 仅选Medium一个元素, 或正在操作GroupMedium的激活成员
     const dragSingleElement = activeElementIdList.value.length === 1 || isActiveGroupElement
 
     // 收集对齐对齐吸附线
-    // 包括页面内除目标元素外的其他元素在画布中的各个可吸附对齐位置：上下左右四边，水平中心、垂直中心
-    // 其中线条和被旋转过的元素需要重新计算他们在画布中的中心点位置的范围
+    // 包括页面内除目标元素外的Other元素在画布Medium的各个可吸附对齐Position: 上下左右四边, HorizontalMedium心, VerticalMedium心
+    // 其MediumLine和被Rotate过的元素需要重新计算他们在画布Medium的Medium心PointPosition的范围
     let horizontalLines: AlignLine[] = []
     let verticalLines: AlignLine[] = []
 
@@ -101,7 +101,7 @@ export default (
       verticalLines.push(leftLine, rightLine, verticalCenterLine)
     }
 
-    // 画布可视区域的四个边界、水平中心、垂直中心
+    // 画布可视区域的四个边界, HorizontalMedium心, VerticalMedium心
     const edgeTopLine: AlignLine = { value: 0, range: [0, edgeWidth] }
     const edgeBottomLine: AlignLine = { value: edgeHeight, range: [0, edgeWidth] }
     const edgeHorizontalCenterLine: AlignLine = { value: edgeHeight / 2, range: [0, edgeWidth] }
@@ -116,10 +116,10 @@ export default (
     horizontalLines = uniqAlignLines(horizontalLines)
     verticalLines = uniqAlignLines(verticalLines)
 
-    // Ctrl+拖拽复制：拷贝选中元素并将副本插入画布，
-    // 然后将拖拽目标切换为副本元素，后续移动操作作用于副本上
+    // Ctrl+拖拽Copy: 拷贝selected element并将副本Insert画布, 
+    // 然后将拖拽目标Transitions为副本元素, 后续Move操作作用于副本上
     const duplicateElement = () => {
-      // 拷贝源元素，单选时仅复制目标元素，多选时复制所有选中元素
+      // 拷贝源元素, 单选时仅Copy目标元素, Multi-select时Copy所有selected element
       const sourceElements = JSON.parse(JSON.stringify(dragSingleElement ? [dragTargetElement] : originActiveElementList)) as PPTElement[]
 
       const { groupIdMap, elIdMap } = createElementIdMap(sourceElements)
@@ -134,7 +134,7 @@ export default (
       elementList.value = [...elementList.value, ...duplicatedElements]
       slidesStore.updateSlide({ elements: elementList.value })
 
-      // 将选中状态切换到副本元素
+      // 将选Medium状态Transitions到副本元素
       const duplicatedActiveElementIdList = duplicatedElements.map(item => item.id)
       const duplicatedHandleElementId = elIdMap[dragTargetElement.id]
       const duplicatedHandleElement = duplicatedElements.find(item => item.id === duplicatedHandleElementId)
@@ -144,7 +144,7 @@ export default (
       mainStore.setHandleElementId(duplicatedHandleElementId)
       mainStore.setActiveGroupElementId('')
 
-      // 将拖拽目标和初始属性替换为副本
+      // 将拖拽目标和初始属性Replace为副本
       dragTargetElement = duplicatedHandleElement
       originActiveElementList = duplicatedElements
 
@@ -161,17 +161,17 @@ export default (
       const currentPageX = e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX
       const currentPageY = e instanceof MouseEvent ? e.pageY : e.changedTouches[0].pageY
 
-      // 如果鼠标滑动距离过小，则将操作判定为误操作：
-      // 如果误操作标记为null，表示是第一次触发移动，需要计算当前是否是误操作
-      // 如果误操作标记为true，表示当前还处在误操作范围内，但仍然需要继续计算检查后续操作是否还处于误操作
-      // 如果误操作标记为false，表示已经脱离了误操作范围，不需要再次计算
+      // 如果鼠标滑动距离过Small, 则将操作判定为误操作: 
+      // 如果误操作标记为null, 表示是第一次触发Move, 需要计算当前是否是误操作
+      // 如果误操作标记为true, 表示当前还处在误操作范围内, 但仍然需要继续计算检查后续操作是否还处于误操作
+      // 如果误操作标记为false, 表示已经脱离了误操作范围, 不需要再次计算
       if (isMisoperation !== false) {
         isMisoperation = Math.abs(startPageX - currentPageX) < sorptionRange && 
                          Math.abs(startPageY - currentPageY) < sorptionRange
       }
       if (!isMouseDown || isMisoperation) return
 
-      // 拖拽过程中按住Ctrl键且尚未复制过，则触发复制
+      // 拖拽过程MediumBy住Ctrl键且尚未Copy过, 则触发Copy
       if (!duplicateTriggered && ctrlKeyState.value) duplicateElement()
       
       let moveX = (currentPageX - startPageX) / canvasScale.value
@@ -182,12 +182,12 @@ export default (
         if (Math.abs(moveX) < Math.abs(moveY)) moveX = 0
       }
 
-      // 基础目标位置
+      // 基础目标Position
       let targetLeft = elOriginLeft + moveX
       let targetTop = elOriginTop + moveY
 
-      // 计算目标元素在画布中的位置范围，用于吸附对齐
-      // 需要区分单选和多选两种情况，其中多选状态下需要计算多选元素的整体范围；单选状态下需要继续区分线条、普通元素、旋转后的普通元素三种情况
+      // 计算目标元素在画布Medium的Position范围, 用于吸附对齐
+      // 需要区分单选和Multi-select两种情况, 其MediumMulti-select状态下需要计算Multi-select元素的整体范围; 单选状态下需要继续区分Line, 普通元素, Rotate后的普通元素三种情况
       let targetMinX: number, targetMaxX: number, targetMinY: number, targetMaxY: number
 
       if (dragSingleElement) {
@@ -261,8 +261,8 @@ export default (
       const targetCenterX = targetMinX + (targetMaxX - targetMinX) / 2
       const targetCenterY = targetMinY + (targetMaxY - targetMinY) / 2
 
-      // 将收集到的对齐吸附线与计算的目标元素位置范围做对比，二者的差小于设定的值时执行自动对齐校正
-      // 水平和垂直两个方向需要分开计算
+      // 将收集到的对齐吸附线与计算的目标元素Position范围做对比, 二者的差Small于设定的Value时执行Auto对齐校正
+      // Horizontal和Vertical两个方向需要分On计算
       const _alignmentLines: AlignmentLineProps[] = []
       let isVerticalAdsorbed = false
       let isHorizontalAdsorbed = false
@@ -310,15 +310,15 @@ export default (
       }
       alignmentLines.value = _alignmentLines
       
-      // 单选状态下，或者当前选中的多个元素中存在正在操作的元素时，仅修改正在操作的元素的位置
+      // 单选状态下, 或者当前选Medium的多个元素Medium存在正在操作的元素时, 仅修改正在操作的元素的Position
       if (dragSingleElement) {
         elementList.value = elementList.value.map(el => {
           return el.id === dragTargetElement.id ? { ...el, left: targetLeft, top: targetTop } : el
         })
       }
 
-      // 多选状态下，除了修改正在操作的元素的位置，其他被选中的元素也需要修改位置信息
-      // 其他被选中的元素的位置信息通过正在操作的元素的移动偏移量来进行计算
+      // Multi-select状态下, 除了修改正在操作的元素的Position, Other被选Medium的元素也需要修改Position信息
+      // Other被选Medium的元素的Position信息通过正在操作的元素的Move偏移量来进行计算
       else {
         const handleElement = elementList.value.find(el => el.id === dragTargetElement.id)
         if (!handleElement) return

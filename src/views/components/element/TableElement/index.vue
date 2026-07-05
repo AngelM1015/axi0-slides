@@ -41,7 +41,7 @@
           @mousedown="$event => handleSelectElement($event)"
           @touchstart="$event => handleSelectElement($event)"
         >
-          <div class="mask-tip" v-if="handleElementId === elementInfo.id" :style="{ transform: `scale(${ 1 / canvasScale })` }">双击编辑</div>
+          <div class="mask-tip" v-if="handleElementId === elementInfo.id" :style="{ transform: `scale(${ 1 / canvasScale })` }">Double-click to edit</div>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@ const handleSelectElement = (e: MouseEvent | TouchEvent) => {
   props.selectElement(e, props.elementInfo)
 }
 
-// 更新表格的可编辑状态，表格处于编辑状态时需要禁用全局快捷键
+// 更新Table的可Edit状态, Table处于Edit状态时需要disabled全局快捷键
 const editable = ref(false)
 
 watch(handleElementId, () => {
@@ -94,8 +94,8 @@ const startEdit = () => {
   if (!props.elementInfo.lock) editable.value = true
 }
 
-// 监听表格元素的尺寸变化，当高度变化时，更新高度到vuex
-// 如果高度变化时正处在缩放操作中，则等待缩放操作结束后再更新
+// 监听Table元素的尺寸变化, 当高度变化时, 更新高度到vuex
+// 如果高度变化时正处在Zoom操作Medium, 则等待Zoom操作End后再更新
 const realHeightCache = ref(-1)
 
 watch(isScaling, () => {
@@ -138,7 +138,7 @@ onUnmounted(() => {
   if (elementRef.value) resizeObserver.unobserve(elementRef.value)
 })
 
-// 更新表格内容数据
+// 更新TableContent数据
 const updateTableCells = (data: TableCell[][]) => {
   slidesStore.updateElement({
     id: props.elementInfo.id, 
@@ -168,7 +168,7 @@ const updateColWidths = (widths: number[]) => {
   addHistorySnapshot()
 }
 
-// 更新表格当前选中的单元格
+// 更新Table当前选Medium的单元格
 const updateSelectedCells = (cells: string[]) => {
   nextTick(() => mainStore.setSelectedTableCells(cells))
 }

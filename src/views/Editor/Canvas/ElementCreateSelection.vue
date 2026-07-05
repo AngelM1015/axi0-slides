@@ -7,7 +7,7 @@
   >
     <div :class="['selection', creatingElement?.type]" v-if="start && end" :style="position">
 
-      <!-- 绘制线条专用 -->
+      <!-- 绘制Line专用 -->
       <svg
         v-if="creatingElement?.type === 'line' && lineData"
         overflow="visible" 
@@ -53,8 +53,8 @@ onMounted(() => {
   offset.value = { x, y }
 })
 
-// 鼠标拖动创建元素生成位置大小
-// 获取范围的起始位置和终点位置
+// 鼠标拖动创建元素GeneratePositionLargeSmall
+// 获取范围的起始Position和终PointPosition
 const createSelection = (e: MouseEvent) => {
   let isMouseDown = true
 
@@ -68,19 +68,19 @@ const createSelection = (e: MouseEvent) => {
     let currentPageX = e.pageX
     let currentPageY = e.pageY
 
-    // 按住Ctrl键或者Shift键时：
-    // 对于非线条元素需要锁定宽高比例，对于线条元素需要锁定水平或垂直方向
+    // By住Ctrl键或者Shift键时: 
+    // 对于非Line元素需要Lock aspect ratio, 对于Line元素需要LockHorizontal或Vertical方向
     if (ctrlOrShiftKeyActive.value) {
       const moveX = currentPageX - startPageX
       const moveY = currentPageY - startPageY
 
-      // 水平和垂直方向的拖动距离，后面以拖动距离较大的方向为基础计算另一方向的数据
+      // Horizontal和Vertical方向的拖动距离, 后面以拖动距离较Large的方向为基础计算另一方向的数据
       const absX = Math.abs(moveX)
       const absY = Math.abs(moveY)
 
       if (creatingElement.value.type === 'shape') {
 
-        // 判断是否为反向拖动：从左上到右下为正向操作，此外所有情况都是反向操作
+        // 判断是否为反向拖动: 从左上到右下为正向操作, 此外所有情况都是反向操作
         const isOpposite = (moveY > 0 && moveX < 0) || (moveY < 0 && moveX > 0)
 
         if (absX > absY) {
@@ -150,7 +150,7 @@ const createSelection = (e: MouseEvent) => {
   }
 }
 
-// 绘制线条的路径相关数据（仅当绘制元素类型为线条时使用）
+// 绘制Line的路径相Off数据 (仅当绘制元素Type为Line时使用)
 const lineData = computed(() => {
   if (!start.value || !end.value) return null
   if (!creatingElement.value || creatingElement.value.type !== 'line') return null
@@ -183,7 +183,7 @@ const lineData = computed(() => {
   }
 })
 
-// 根据生成范围的起始位置和终点位置，计算元素创建时的位置和大小
+// 根据Generate范围的起始Position和终PointPosition, 计算元素创建时的Position和LargeSmall
 const position = computed(() => {
   if (!start.value || !end.value) return {}
 

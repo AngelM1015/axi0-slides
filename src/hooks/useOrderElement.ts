@@ -11,9 +11,9 @@ export default () => {
   const { addHistorySnapshot } = useHistorySnapshot()
 
   /**
-   * 获取组合元素层级范围
+   * 获取Group元素层级范围
    * @param elementList 本页所有元素列表
-   * @param combineElementList 组合元素列表
+   * @param combineElementList Group元素列表
    */
   const getCombineElementLevelRange = (elementList: PPTElement[], combineElementList: PPTElement[]) => {
     return {
@@ -23,26 +23,26 @@ export default () => {
   }
 
   /**
-   * 上移一层
+   * Bring forward
    * @param elementList 本页所有元素列表
    * @param element 当前操作的元素
    */
   const moveUpElement = (elementList: PPTElement[], element: PPTElement) => {
     const copyOfElementList: PPTElement[] = JSON.parse(JSON.stringify(elementList))
 
-    // 如果被操作的元素是组合元素成员，需要将该组合全部成员一起进行移动
+    // 如果被操作的元素是Group元素成员, 需要将该GroupAll成员一起进行Move
     if (element.groupId) {
 
-      // 获取到该组合全部成员，以及所有成员的层级范围
+      // 获取到该GroupAll成员, 以及所有成员的层级范围
       const combineElementList = copyOfElementList.filter(_element => _element.groupId === element.groupId)
       const { minLevel, maxLevel } = getCombineElementLevelRange(elementList, combineElementList)
 
-      // 已经处在顶层，无法继续移动
+      // 已经处在顶层, None法继续Move
       if (maxLevel === elementList.length - 1) return
 
-      // 通过组合成员范围的最大值，获取到该组合上一层的元素，然后将该组合元素从元素列表中移除（并缓存被移除的元素列表）
-      // 若上层元素处在另一个组合中，则将上述被移除的组合元素插入到该上层组合上方
-      // 若上层元素不处于任何分组中，则将上述被移除的组合元素插入到该上层元素上方
+      // 通过Group成员范围的最LargeValue, 获取到该Group上一层的元素, 然后将该Group元素从元素列表MediumRemove (并缓存被Remove的元素列表)
+      // 若上层元素处在另一个GroupMedium, 则将上述被Remove的Group元素Insert到该上层Group上方
+      // 若上层元素不处于任何分组Medium, 则将上述被Remove的Group元素Insert到该上层元素上方
       const nextElement = copyOfElementList[maxLevel + 1]
       const movedElementList = copyOfElementList.splice(minLevel, combineElementList.length)
 
@@ -53,22 +53,22 @@ export default () => {
       else copyOfElementList.splice(minLevel + 1, 0, ...movedElementList)
     }
 
-    // 如果被操作的元素不是组合元素成员
+    // 如果被操作的元素不是Group元素成员
     else {
 
-      // 获取该元素在列表中的层级
+      // 获取该元素在列表Medium的层级
       const level = elementList.findIndex(item => item.id === element.id)
 
-      // 已经处在顶层，无法继续移动
+      // 已经处在顶层, None法继续Move
       if (level === elementList.length - 1) return
 
-      // 获取到该组合上一层的元素，然后将该组合元素从元素列表中移除（并缓存被移除的元素列表）
+      // 获取到该Group上一层的元素, 然后将该Group元素从元素列表MediumRemove (并缓存被Remove的元素列表)
       const nextElement = copyOfElementList[level + 1]
       const movedElement = copyOfElementList.splice(level, 1)[0]
 
-      // 通过组合成员范围的最大值，获取到该组合上一层的元素，然后将该组合元素从元素列表中移除（并缓存被移除的元素列表）
-      // 若上层元素处在另一个组合中，则将上述被移除的组合元素插入到该上层组合上方
-      // 若上层元素不处于任何分组中，则将上述被移除的组合元素插入到该上层元素上方
+      // 通过Group成员范围的最LargeValue, 获取到该Group上一层的元素, 然后将该Group元素从元素列表MediumRemove (并缓存被Remove的元素列表)
+      // 若上层元素处在另一个GroupMedium, 则将上述被Remove的Group元素Insert到该上层Group上方
+      // 若上层元素不处于任何分组Medium, 则将上述被Remove的Group元素Insert到该上层元素上方
       if (nextElement.groupId) {
         const combineElementList = copyOfElementList.filter(_element => _element.groupId === nextElement.groupId)
         copyOfElementList.splice(level + combineElementList.length, 0, movedElement)
@@ -80,7 +80,7 @@ export default () => {
   }
 
   /**
-   * 下移一层，操作方式同上移
+   * Send backward, 操作方式同Move up
    * @param elementList 本页所有元素列表
    * @param element 当前操作的元素
    */
@@ -120,38 +120,38 @@ export default () => {
   }
 
   /**
-   * 置顶层
+   * Bring to front
    * @param elementList 本页所有元素列表
    * @param element 当前操作的元素
    */
   const moveTopElement = (elementList: PPTElement[], element: PPTElement) => {
     const copyOfElementList: PPTElement[] = JSON.parse(JSON.stringify(elementList))
 
-    // 如果被操作的元素是组合元素成员，需要将该组合全部成员一起进行移动
+    // 如果被操作的元素是Group元素成员, 需要将该GroupAll成员一起进行Move
     if (element.groupId) {
 
-      // 获取到该组合全部成员，以及所有成员的层级范围
+      // 获取到该GroupAll成员, 以及所有成员的层级范围
       const combineElementList = copyOfElementList.filter(_element => _element.groupId === element.groupId)
       const { minLevel, maxLevel } = getCombineElementLevelRange(elementList, combineElementList)
 
-      // 已经处在顶层，无法继续移动
+      // 已经处在顶层, None法继续Move
       if (maxLevel === elementList.length - 1) return null
 
-      // 将该组合元素从元素列表中移除，然后将被移除的元素添加到元素列表顶部
+      // 将该Group元素从元素列表MediumRemove, 然后将被Remove的元素Add到元素列表顶部
       const movedElementList = copyOfElementList.splice(minLevel, combineElementList.length)
       copyOfElementList.push(...movedElementList)
     }
 
-    // 如果被操作的元素不是组合元素成员
+    // 如果被操作的元素不是Group元素成员
     else {
 
-      // 获取该元素在列表中的层级
+      // 获取该元素在列表Medium的层级
       const level = elementList.findIndex(item => item.id === element.id)
 
-      // 已经处在顶层，无法继续移动
+      // 已经处在顶层, None法继续Move
       if (level === elementList.length - 1) return null
 
-      // 将该组合元素从元素列表中移除，然后将被移除的元素添加到元素列表底部
+      // 将该Group元素从元素列表MediumRemove, 然后将被Remove的元素Add到元素列表底部
       copyOfElementList.splice(level, 1)
       copyOfElementList.push(element)
     }
@@ -160,7 +160,7 @@ export default () => {
   }
 
   /**
-   * 置底层，操作方式同置顶
+   * Send to back, 操作方式同Bring to front
    * @param elementList 本页所有元素列表
    * @param element 当前操作的元素
    */
@@ -190,7 +190,7 @@ export default () => {
   /**
    * 调整元素层级
    * @param element 需要调整层级的元素
-   * @param command 调整命令：上移、下移、置顶、置底
+   * @param command 调整命令: Move up, Move down, Bring to front, Send to back
    */
   const orderElement = (element: PPTElement, command: ElementOrderCommands) => {
     let newElementList

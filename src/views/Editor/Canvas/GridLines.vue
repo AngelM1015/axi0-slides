@@ -25,7 +25,7 @@ const { currentSlide, viewportRatio, viewportSize } = storeToRefs(useSlidesStore
 
 const background = computed<SlideBackground | undefined>(() => currentSlide.value?.background)
 
-// 计算网格线的颜色，避免与背景的颜色太接近
+// 计算Gridlines的Color, 避免与背景的Color太接近
 const gridColor = computed(() => {
   const bgColor = background.value?.color || '#fff'
   const colorList = ['#000', '#fff']

@@ -53,13 +53,13 @@ export default () => {
     }
     return count
   })
-  // 水平均匀排列
+  // Horizontal均匀排列
   const uniformHorizontalDisplay = () => {
     const { minX, maxX } = getElementListRange(activeElementList.value)
     const copyOfActiveElementList: PPTElement[] = JSON.parse(JSON.stringify(activeElementList.value))
     const newElementList: PPTElement[] = JSON.parse(JSON.stringify(currentSlide.value.elements))
 
-    // 分别获取普通元素和组合元素集合，并记录下每一项的范围
+    // 分别获取普通元素和Group元素集合, 并记录下每一项的范围
     const singleElemetList: ElementItem[] = []
     let groupList: GroupItem[] = []
     for (const el of copyOfActiveElementList) {
@@ -81,11 +81,11 @@ export default () => {
       formatedGroupList.push({ min: minX, max: maxX, els: groupItem.els })
     }
 
-    // 将普通元素和组合元素集合组合在一起，然后将每一项按位置（从左到右）排序
+    // 将普通元素和Group元素集合Group在一起, 然后将每一项ByPosition (从左到右)排序
     const list: Item[] = [...singleElemetList, ...formatedGroupList]
     list.sort((itemA, itemB) => itemA.min - itemB.min)
 
-    // 计算元素均匀分布所需要的间隔：
+    // 计算元素均匀分布所需要的间隔: 
     // (所选元素整体范围 - 所有所选元素宽度和) / (所选元素数 - 1)
     let totalWidth = 0
     for (const item of list) {
@@ -94,10 +94,10 @@ export default () => {
     }
     const span = ((maxX - minX) - totalWidth) / (list.length - 1)
 
-    // 按位置顺序依次计算每一个元素的目标位置
-    // 第一项中的元素即为起点，无需计算
-    // 从第二项开始，每一项的位置应该为：上一项位置 + 上一项宽度 + 间隔
-    // 注意此处计算的位置（pos）并非元素最终的left值，而是目标位置范围最小值（元素旋转后的left值 ≠ 范围最小值）
+    // ByPosition顺序依次计算每一个元素的目标Position
+    // 第一项Medium的元素即为起Point, None需计算
+    // 从第二项Start, 每一项的Position应该为: 上一项Position + 上一项宽度 + 间隔
+    // 注意此处计算的Position (pos)并非元素最终的leftValue, 而是目标Position范围最SmallValue (元素Rotate后的leftValue ≠ 范围最SmallValue)
     const sortedElementData: ElementWithPos[] = []
 
     const firstItem = list[0]
@@ -132,8 +132,8 @@ export default () => {
       }
     }
 
-    // 根据目标位置计算元素最终目标left值
-    // 对于旋转后的元素，需要计算旋转前后left的偏移来做校正
+    // 根据目标Position计算元素最终目标leftValue
+    // 对于Rotate后的元素, 需要计算Rotate前后left的偏移来做校正
     for (const element of newElementList) {
       if (!activeElementIdList.value.includes(element.id)) continue
 
@@ -158,7 +158,7 @@ export default () => {
     addHistorySnapshot()
   }
 
-  // 垂直均匀排列（逻辑类似水平均匀排列方法）
+  // Vertical均匀排列 (逻辑类似Horizontal均匀排列方法)
   const uniformVerticalDisplay = () => {
     const { minY, maxY } = getElementListRange(activeElementList.value)
     const copyOfActiveElementList: PPTElement[] = JSON.parse(JSON.stringify(activeElementList.value))

@@ -1,7 +1,7 @@
 import { type Ref, computed } from 'vue'
 import type { SlideBackground } from '@/types/slides'
 
-// 将页面背景数据转换为css样式
+// 将页面背景数据转换为cssStyle
 export default (background: Ref<SlideBackground | undefined>) => {
   const backgroundStyle = computed(() => {
     if (!background.value) return { backgroundColor: '#fff' }
@@ -16,8 +16,8 @@ export default (background: Ref<SlideBackground | undefined>) => {
     // 纯色背景
     if (type === 'solid') return { backgroundColor: color }
 
-    // 背景图模式
-    // 包括：背景图、背景大小，是否重复
+    // Background image模式
+    // 包括: Background image, 背景LargeSmall, 是否重复
     else if (type === 'image' && image) {
       const { src, size } = image
       if (!src) return { backgroundColor: '#fff' }

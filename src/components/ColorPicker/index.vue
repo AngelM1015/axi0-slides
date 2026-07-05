@@ -62,7 +62,7 @@
       ></div>
     </div>
 
-    <div class="recent-colors-title" v-if="recentColors.length">最近使用：</div>
+    <div class="recent-colors-title" v-if="recentColors.length">Recently used: </div>
     <div class="picker-presets">
       <div
         class="picker-presets-color alpha"
@@ -170,7 +170,7 @@ const selectPresetColor = (colorString: string) => {
   emit('update:modelValue', colorString)
 }
 
-// 每次选择非预设颜色时，需要将该颜色加入到最近使用列表中
+// 每次Select非预设Color时, 需要将该Color加入到最近使用列表Medium
 const updateRecentColorsCache = debounce(function() {
   const _color = tinycolor(color.value).toRgbString()
   if (!recentColors.value.includes(_color)) {
@@ -206,8 +206,8 @@ const changeColor = (value: ColorFormats.RGBA | ColorFormats.HSLA | ColorFormats
   updateRecentColorsCache()
 }
 
-// 打开取色吸管
-// 检查环境是否支持原生取色吸管，支持则使用原生吸管，否则使用自定义吸管
+// 打On取色吸管
+// 检查环境是否支持原生取色吸管, 支持则使用原生吸管, 否则使用Custom吸管
 const openEyeDropper = () => {
   const isSupportedEyeDropper = 'EyeDropper' in window
 
@@ -217,7 +217,7 @@ const openEyeDropper = () => {
 
 // 原生取色吸管
 const browserEyeDropper = () => {
-  message.success('按 ESC 键关闭取色吸管', { duration: 0 })
+  message.success('Press ESC to close the eyedropper', { duration: 0 })
 
   // eslint-disable-next-line
   const eyeDropper = new (window as any).EyeDropper()
@@ -233,7 +233,7 @@ const browserEyeDropper = () => {
   })
 }
 
-// 基于 Canvas 的自定义取色吸管
+// 基于 Canvas 的Custom取色吸管
 const customEyeDropper = () => {
   const targetRef: HTMLElement | null = document.querySelector('.canvas')
   if (!targetRef) return
@@ -302,7 +302,7 @@ const customEyeDropper = () => {
     canvasRef.addEventListener('mouseleave', handleMouseleave)
     window.addEventListener('mousedown', handleMousedown)
   }).catch(() => {
-    message.error('取色吸管初始化失败')
+    message.error('Eyedropper failed to start')
     document.body.removeChild(maskRef)
   })
 }

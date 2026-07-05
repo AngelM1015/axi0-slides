@@ -16,7 +16,7 @@ const contextmenuListener = (el: HTMLElement, event: MouseEvent, binding: Direct
 
   let container: HTMLDivElement | null = null
 
-  // 移除右键菜单并取消相关的事件监听
+  // Remove右键菜单并Cancel相Off的事件监听
   const removeContextmenu = () => {
     if (container) {
       document.body.removeChild(container)
@@ -27,7 +27,7 @@ const contextmenuListener = (el: HTMLElement, event: MouseEvent, binding: Direct
     window.removeEventListener('resize', removeContextmenu)
   }
 
-  // 创建自定义菜单
+  // 创建Custom菜单
   const options = {
     axis: { x: event.x, y: event.y },
     el,
@@ -39,10 +39,10 @@ const contextmenuListener = (el: HTMLElement, event: MouseEvent, binding: Direct
   render(vm, container)
   document.body.appendChild(container)
 
-  // 为目标节点添加菜单激活状态的className
+  // 为目标SectionPointAdd菜单激活状态的className
   el.classList.add('contextmenu-active')
 
-  // 页面变化时移除菜单
+  // 页面变化时Remove菜单
   document.body.addEventListener('scroll', removeContextmenu)
   window.addEventListener('resize', removeContextmenu)
 }

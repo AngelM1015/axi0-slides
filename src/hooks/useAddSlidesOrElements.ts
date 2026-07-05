@@ -13,7 +13,7 @@ export default () => {
   const { addHistorySnapshot } = useHistorySnapshot()
 
   /**
-   * 添加指定的元素数据（一组）
+   * Add指定的元素数据 (一组)
    * @param elements 元素列表数据
    */
   const addElementsFromData = (elements: PPTElement[]) => {
@@ -60,7 +60,7 @@ export default () => {
   }
 
   /**
-   * 添加指定的页面数据
+   * Add指定的页面数据
    * @param slide 页面数据
    */
   const addSlidesFromData = (slides: Slide[]) => {
@@ -75,15 +75,15 @@ export default () => {
         // 若元素绑定了页面跳转链接
         if (element.link && element.link.type === 'slide') {
 
-          // 待添加页面中包含该页面，则替换相关绑定关系
+          // 待Add页面Medium包含该页面, 则Replace相Off绑定Off系
           if (slideIdMap[element.link.target]) {
             element.link.target = slideIdMap[element.link.target]
           }
-          // 待添加页面中不包含该页面，则删除该元素绑定的页面跳转
+          // 待Add页面Medium不包含该页面, 则Delete该元素绑定的页面跳转
           else delete element.link
         }
       }
-      // 动画id替换
+      // AnimationidReplace
       if (slide.animations) {
         for (const animation of slide.animations) {
           animation.id = nanoid(10)

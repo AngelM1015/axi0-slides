@@ -4,8 +4,8 @@ interface ImageSize {
 }
 
 /**
- * 获取图片的原始宽高
- * @param src 图片地址
+ * 获取Image的原始宽高
+ * @param src Image地址
  */
 export const getImageSize = (src: string): Promise<ImageSize> => {
   return new Promise(resolve => {
@@ -34,8 +34,8 @@ export const getImageSize = (src: string): Promise<ImageSize> => {
 }
 
 /**
- * 读取图片文件的dataURL
- * @param file 图片文件
+ * 读取Image文件的dataURL
+ * @param file Image文件
  */
 export const getImageDataURL = (file: File): Promise<string> => {
   return new Promise(resolve => {
@@ -49,7 +49,7 @@ export const getImageDataURL = (file: File): Promise<string> => {
 
 /**
  * 判断是否为SVG代码字符串
- * @param text 待验证文本
+ * @param text 待验证Text
  */
 export const isSVGString = (text: string): boolean => {
   const svgRegex = /<svg[\s\S]*?>[\s\S]*?<\/svg>/i

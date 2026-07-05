@@ -1,10 +1,10 @@
-<template>
+﻿<template>
   <div class="aippt-dialog">
     <div class="header">
       <span class="title">AIPPT</span>
-      <span class="subtite" v-if="step === 'template'">从下方挑选合适的模板生成PPT，或<span class="local" v-tooltip="'上传.pptist格式模板文件'" @click="uploadLocalTemplate()">使用本地模板生成</span></span>
-      <span class="subtite" v-else-if="step === 'outline'">确认下方内容大纲（点击编辑内容，右键添加/删除大纲项），开始选择模板</span>
-      <span class="subtite" v-else>在下方输入您的PPT主题，并适当补充信息，如行业、岗位、学科、用途等</span>
+      <span class="subtite" v-if="step === 'template'">Pick a template below to generate the deck, or<span class="local" v-tooltip="'Upload a .pptist template file'" @click="uploadLocalTemplate()">Generate from a local template</span></span>
+      <span class="subtite" v-else-if="step === 'outline'">Confirm the outline below (click to edit, right-click to add/remove items), then pick a template</span>
+      <span class="subtite" v-else>Enter your deck topic below, plus helpful context such as industry, role, subject, or purpose</span>
     </div>
     
     <template v-if="step === 'setup'">
@@ -12,12 +12,12 @@
         ref="inputRef"
         v-model:value="keyword" 
         :maxlength="50" 
-        placeholder="请输入PPT主题，如：大学生职业生涯规划" 
+        placeholder="Enter a topic, e.g. Career planning for graduates" 
         @enter="createOutline()"
       >
         <template #suffix>
           <span class="count">{{ keyword.length }} / 50</span>
-          <div class="submit" type="primary" @click="createOutline()"><i-icon-park-outline:send class="icon" /> AI 生成</div>
+          <div class="submit" type="primary" @click="createOutline()"><i-icon-park-outline:send class="icon" /> AI Generate</div>
         </template>
       </Input>
       <div class="recommends">
@@ -25,35 +25,35 @@
       </div>
       <div class="configs">
         <div class="config-item">
-          <div class="label">语言：</div>
+          <div class="label">Language: </div>
           <Select 
             class="config-content"
             style="width: 80px;"
             v-model:value="language"
             :options="[
-              { label: '中文', value: '中文' },
-              { label: '英文', value: 'English' },
-              { label: '日文', value: '日本語' },
+              { label: 'Chinese', value: 'Chinese' },
+              { label: 'English', value: 'English' },
+              { label: 'Japanese', value: 'Japanese' },
             ]"
           />
         </div>
         <div class="config-item">
-          <div class="label">风格：</div>
+          <div class="label">Style: </div>
           <Select 
             class="config-content"
             style="width: 80px;"
             v-model:value="style"
             :options="[
-              { label: '通用', value: '通用' },
-              { label: '学术风', value: '学术风' },
-              { label: '职场风', value: '职场风' },
-              { label: '教育风', value: '教育风' },
-              { label: '营销风', value: '营销风' },
+              { label: 'General', value: 'General' },
+              { label: 'Academic', value: 'Academic' },
+              { label: 'Business', value: 'Business' },
+              { label: 'Education', value: 'Education' },
+              { label: 'Marketing', value: 'Marketing' },
             ]"
           />
         </div>
         <div class="config-item">
-          <div class="label">模型：</div>
+          <div class="label">Model: </div>
           <Select 
             class="config-content"
             style="width: 190px;"
@@ -67,23 +67,23 @@
           />
         </div>
         <div class="config-item">
-          <div class="label">配图：</div>
+          <div class="label">Images: </div>
           <Select 
             class="config-content"
             style="width: 100px;"
             v-model:value="img"
             :options="[
-              { label: '无', value: '' },
-              { label: '模拟测试', value: 'test' },
-              { label: 'AI搜图', value: 'ai-search', disabled: true },
-              { label: 'AI生图', value: 'ai-create', disabled: true },
+              { label: 'None', value: '' },
+              { label: 'Mock test', value: 'test' },
+              { label: 'AISearch images', value: 'ai-search', disabled: true },
+              { label: 'AIGenerate images', value: 'ai-create', disabled: true },
             ]"
           />
         </div>
       </div>
       <div class="configs" v-if="!isEmptySlide">
         <div class="config-item">
-          <Checkbox v-model:value="overwrite">覆盖已有幻灯片</Checkbox>
+          <Checkbox v-model:value="overwrite">Replace existing slides</Checkbox>
         </div>
       </div>
     </template>
@@ -93,8 +93,8 @@
          <OutlineEditor v-model:value="outline" />
        </div>
       <div class="btns" v-if="!outlineCreating">
-        <Button class="btn" type="primary" @click="step = 'template'">选择模板</Button>
-        <Button class="btn" @click="outline = ''; step = 'setup'">返回重新生成</Button>
+        <Button class="btn" type="primary" @click="step = 'template'">Choose template</Button>
+        <Button class="btn" @click="outline = ''; step = 'setup'">Back to regenerate</Button>
       </div>
     </div>
     <div class="select-template" v-if="step === 'template'">
@@ -109,12 +109,12 @@
         </div>
       </div>
       <div class="btns">
-        <Button class="btn" type="primary" @click="createPPT()">生成</Button>
-        <Button class="btn" @click="step = 'outline'">返回大纲</Button>
+        <Button class="btn" type="primary" @click="createPPT()">Generate</Button>
+        <Button class="btn" @click="step = 'outline'">Back to outline</Button>
       </div>
     </div>
 
-    <FullscreenSpin :loading="loading" tip="AI生成中，请耐心等待 ..." />
+    <FullscreenSpin :loading="loading" tip="AIGenerating, please wait ..." />
   </div>
 </template>
 
@@ -144,8 +144,8 @@ const { templates } = storeToRefs(slidesStore)
 const { resetSlides, isEmptySlide } = useSlideHandler()
 const { AIPPT, presetImgPool, getMdContent } = useAIPPT()
 
-const language = ref('中文')
-const style = ref('通用')
+const language = ref('Chinese')
+const style = ref('General')
 const img = ref('')
 const keyword = ref('')
 const outline = ref('')
@@ -159,16 +159,16 @@ const outlineRef = useTemplateRef<HTMLElement>('outlineRef')
 const inputRef = useTemplateRef<InstanceType<typeof Input>>('inputRef')
 
 const recommends = ref([
-  '2025科技前沿动态',
-  '大数据如何改变世界',
-  '餐饮市场调查与研究',
-  'AIGC在教育领域的应用',
-  '社交媒体与品牌营销',
-  '5G技术如何改变我们的生活',
-  '年度工作总结与展望',
-  '区块链技术及其应用',
-  '大学生职业生涯规划',
-  '公司年会策划方案',
+  '2025Frontier tech trends',
+  'How big data changes the world',
+  'Restaurant market research',
+  'AIGCApplications in education',
+  'Social media and brand marketing',
+  '5GHow technology changes our lives',
+  'Annual review and outlook',
+  'Blockchain and its applications',
+  'Career planning for graduates',
+  'Company annual event plan',
 ]) 
 
 onMounted(() => {
@@ -183,7 +183,7 @@ const setKeyword = (value: string) => {
 }
 
 const createOutline = async () => {
-  if (!keyword.value) return message.error('请先输入PPT主题')
+  if (!keyword.value) return message.error('Enter a deck topic first')
 
   loading.value = true
   outlineCreating.value = true
@@ -198,7 +198,7 @@ const createOutline = async () => {
   })
   if (typeof stream === 'object' && stream.state === -1) {
     loading.value = false
-    return message.error('该模型API的并发数过高，请更换其他模型重试')
+    return message.error('The model API is overloaded; try another model')
   }
 
   loading.value = false
@@ -232,7 +232,7 @@ const createOutline = async () => {
 const createPPT = async (template?: { slides: Slide[], theme: SlideTheme }) => {
   loading.value = true
   mainStore.setAIPPTDialogState('running')
-  message.loading('演示文稿生成中，请稍等 ...', { duration: 0 })
+  message.loading('Generating the presentation, please wait ...', { duration: 0 })
 
   if (overwrite.value) resetSlides()
 
@@ -317,7 +317,7 @@ const uploadLocalTemplate = () => {
           createPPT({ slides, theme })
         }
         catch {
-          message.error('上传的模板文件数据异常，请重新上传或使用预置模板')
+          message.error('The uploaded template file is invalid; upload again or use a preset template')
         }
       })
       reader.readAsText(file)

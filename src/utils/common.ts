@@ -24,7 +24,7 @@ export const isValidURL = (url: string) => {
 }
 
 /**
- * HTML转纯文本
+ * HTML转纯Text
  */
 export const htmlToText = (html: string) => {
   const doc = new DOMParser().parseFromString(html, 'text/html')
@@ -32,14 +32,14 @@ export const htmlToText = (html: string) => {
 }
 
 /**
- * 浮点数比较
+ * 浮Point数比较
  */
 export const isFloatEqual = (a: number, b: number, epsilon = 1e-10) => {
   return Math.abs(a - b) < epsilon
 }
 
 /**
- * 保留小数转换
+ * 保留Small数转换
  */
 export const toFixed = (num: number, fractionDigits = 1) => {
   if (num % 1 !== 0) {

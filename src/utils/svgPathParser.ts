@@ -1,7 +1,7 @@
 import { SVGPathData, SVGPathDataTransformer } from 'svg-pathdata'
 
 /**
- * 解析SVG路径，并将圆弧（A）类型的路径转为三次贝塞尔（C）类型的路径
+ * 解析SVG路径, 并将Arc (A)Type的路径转为三次贝塞尔 (C)Type的路径
  * @param d SVG path d属性
  */
 export const toPoints = (d: string) => {

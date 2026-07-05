@@ -355,7 +355,7 @@ export default () => {
         else addSlidesFromData(slides)
       }
       catch {
-        message.error('无法正确读取 / 解析该文件')
+        message.error('Could not read / parse this file')
       }
     })
     reader.readAsText(file)
@@ -388,7 +388,7 @@ export default () => {
         else addSlidesFromData(slides)
       }
       catch {
-        message.error('无法正确读取 / 解析该文件')
+        message.error('Could not read / parse this file')
       }
     })
     reader.readAsText(file)
@@ -605,8 +605,8 @@ export default () => {
     by: number, // B 相对 A 的 y (oy)
     bw: number, // B 的宽
     bh: number, // B 的高
-    ak: number, // A 的旋转角度（度，正顺时针）
-    bk: number, // B 的旋转角度（度，正顺时针）
+    ak: number, // A 的Rotate角度 (度, 正Clockwise)
+    bk: number, // B 的Rotate角度 (度, 正Clockwise)
   ) => {
     const aRadians = ak * (Math.PI / 180)
     const aCos = Math.cos(aRadians)
@@ -675,7 +675,7 @@ export default () => {
       }
       catch {
         exporting.value = false
-        message.error('无法正确读取 / 解析该文件')
+        message.error('Could not read / parse this file')
         return
       }
 
@@ -1226,7 +1226,7 @@ export default () => {
               let series: number[][]
   
               if (el.chartType === 'scatterChart' || el.chartType === 'bubbleChart') {
-                labels = el.data[0].map((item, index) => `坐标${index + 1}`)
+                labels = el.data[0].map((item, index) => `Position${index + 1}`)
                 legends = el.data.map((item, index) => {
                   if (index === 0) return 'X'
                   if (index === 1) return 'Y'

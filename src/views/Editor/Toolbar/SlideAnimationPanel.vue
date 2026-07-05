@@ -12,7 +12,7 @@
         <div class="animation-text">{{item.label}}</div>
       </div>
     </div>
-    <Button style="width: 100%;" @click="applyAllSlide()"><i-icon-park-outline:check /> 应用到全部</Button>
+    <Button style="width: 100%;" @click="applyAllSlide()"><i-icon-park-outline:check /> Apply to all</Button>
   </div>
 </template>
 
@@ -35,14 +35,14 @@ const animations = SLIDE_ANIMATIONS
 
 const { addHistorySnapshot } = useHistorySnapshot()
 
-// 修改播放时的切换页面方式
+// 修改Play时的Transitions页面方式
 const updateTurningMode = (mode: TurningMode) => {
   if (mode === currentTurningMode.value) return
   slidesStore.updateSlide({ turningMode: mode })
   addHistorySnapshot()
 }
 
-// 将当前页的切换页面方式应用到全部页面
+// 将Current slide的Transitions页面方式Apply to all页面
 const applyAllSlide = () => {
   const newSlides = slides.value.map(slide => {
     return {
@@ -51,7 +51,7 @@ const applyAllSlide = () => {
     }
   })
   slidesStore.setSlides(newSlides)
-  message.success('已应用到全部')
+  message.success('Applied to all')
   addHistorySnapshot()
 }
 </script>

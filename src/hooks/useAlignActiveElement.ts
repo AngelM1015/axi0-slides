@@ -17,14 +17,14 @@ export default () => {
   const { addHistorySnapshot } = useHistorySnapshot()
 
   /**
-   * 对齐选中的元素
+   * 对齐选Medium的元素
    * @param command 对齐方向
    */
   const alignActiveElement = (command: ElementAlignCommands) => {
     const { minX, maxX, minY, maxY } = getElementListRange(activeElementList.value)
     const elementList: PPTElement[] = JSON.parse(JSON.stringify(currentSlide.value.elements))
 
-    // 如果所选择的元素为组合元素的成员，需要计算该组合的整体范围
+    // 如果所Select的元素为Group元素的成员, 需要计算该Group的整体范围
     const groupElementRangeMap: RangeMap = {}
     for (const activeElement of activeElementList.value) {
       if (activeElement.groupId && !groupElementRangeMap[activeElement.groupId]) {
@@ -33,7 +33,7 @@ export default () => {
       }
     }
 
-    // 根据不同的命令，计算对齐的位置
+    // 根据不同的命令, 计算对齐的Position
     if (command === ElementAlignCommands.LEFT) {
       elementList.forEach(element => {
         if (activeElementIdList.value.includes(element.id)) {

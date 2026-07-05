@@ -53,7 +53,7 @@
           @mousedown="$event => handleSelectElement($event, false)"
         />
 
-        <!-- 当字号过大且行高较小时，会出现文字高度溢出的情况，导致拖拽区域无法被选中，因此添加了以下节点避免该情况 -->
+        <!-- 当字号过Large且行高较Small时, 会出现Text高度溢出的情况, 导致拖拽区域None法被选Medium, 因此Add了以下SectionPoint避免该情况 -->
         <div class="drag-handler top"></div>
         <div class="drag-handler bottom"></div>
       </div>
@@ -109,8 +109,8 @@ const handleSelectElement = (e: MouseEvent | TouchEvent, canMove = true) => {
   props.selectElement(e, props.elementInfo, canMove)
 }
 
-// 监听文本元素的尺寸变化，当高度变化时，更新高度到vuex
-// 如果高度变化时正处在缩放操作中，则等待缩放操作结束后再更新
+// 监听Text元素的尺寸变化, 当高度变化时, 更新高度到vuex
+// 如果高度变化时正处在Zoom操作Medium, 则等待Zoom操作End后再更新
 const realHeightCache = ref(-1)
 const realWidthCache = ref(-1)
 

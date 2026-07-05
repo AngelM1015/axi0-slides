@@ -11,8 +11,8 @@ export default () => {
 
   const { addHistorySnapshot } = useHistorySnapshot()
 
-  // 删除全部选中元素
-  // 组合元素成员中，存在被选中可独立操作的元素时，优先删除该元素。否则默认删除所有被选中的元素
+  // DeleteAllselected element
+  // Group元素成员Medium, 存在被选Medium可独立操作的元素时, 优先Delete该元素. 否则默认Delete所有被选Medium的元素
   const deleteElement = () => {
     if (!activeElementIdList.value.length) return
 
@@ -29,7 +29,7 @@ export default () => {
     addHistorySnapshot()
   }
 
-  // 删除内面内全部元素(无论是否选中)
+  // Delete内面内All元素(None论是否选Medium)
   const deleteAllElements = () => {
     if (!currentSlide.value.elements.length) return
     mainStore.setActiveElementIdList([])
