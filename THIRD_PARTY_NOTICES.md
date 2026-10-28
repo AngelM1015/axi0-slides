@@ -116,3 +116,5 @@ none recorded: 76; OFL-1.1: 1; ISC: 1
 
 - Vendored folders: the files named in their row, inside the folder.
 - npm packages and Rust crates: each package's own licence file, inside its published archive (the link on its name).
+
+<!-- third-party-notices settings: {"vendoredScan":"licence-files"} -->
