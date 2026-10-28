@@ -1,4 +1,4 @@
-$fonts: 'SourceHanSans', 'SourceHanSerif', 'WenDingPLSongTi', 'AlibabaPuHuiTi', 'ZhuQueFangSong', 'LXGWWenKai', 'LXGWNeoZhiSong', 'LXGWNeoXiHei', 'WenDingPLKaiTi', 'DeYiHei', 'MiSans', 'SourceSerif4', 'Inter', 'JetBrainsMono', 'Literata', 'Roboto', 'OpenSans', 'Montserrat', 'SourceSansPro', 'Merriweather', 'Lato';
+$fonts: 'InstrumentSans', 'Inter', 'Roboto', 'OpenSans', 'Lato', 'Montserrat', 'SourceSansPro', 'SourceSerif4', 'Merriweather', 'Literata', 'JetBrainsMono';
 
 @each $font in $fonts {
   @font-face {

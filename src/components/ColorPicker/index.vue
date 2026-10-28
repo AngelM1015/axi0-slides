@@ -78,6 +78,7 @@
 </template>
 
 <script lang="ts" setup>
+import { memoryStorage } from '@/axi0/memory-storage'
 import { computed, onMounted, ref, watch } from 'vue'
 import tinycolor, { type ColorFormats } from 'tinycolor2'
 import { debounce } from 'lodash'
@@ -184,13 +185,13 @@ const updateRecentColorsCache = debounce(function() {
 }, 300, { trailing: true })
 
 onMounted(() => {
-  const recentColorsCache = localStorage.getItem(RECENT_COLORS)
+  const recentColorsCache = memoryStorage.getItem(RECENT_COLORS)
   if (recentColorsCache) recentColors.value = JSON.parse(recentColorsCache)
 })
 
 watch(recentColors, () => {
   const recentColorsCache = JSON.stringify(recentColors.value)
-  localStorage.setItem(RECENT_COLORS, recentColorsCache)
+  memoryStorage.setItem(RECENT_COLORS, recentColorsCache)
 })
 
 const changeColor = (value: ColorFormats.RGBA | ColorFormats.HSLA | ColorFormats.HSVA) => {

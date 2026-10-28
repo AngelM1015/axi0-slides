@@ -1,3 +1,12 @@
+# axi0-slides
+
+The slide editor of axi0 Slides: a modified [PPTist](https://github.com/pipipi-pikachu/PPTist), AGPL-3.0 like the original.
+What we changed and why: [FORK.md](FORK.md). Build: `./build.sh` (dist/ is what the frame serves).
+
+The upstream README follows.
+
+---
+
 <p align="center">
     <img src='/public/logo.png' />
 </p>

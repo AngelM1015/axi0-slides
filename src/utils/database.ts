@@ -1,7 +1,7 @@
-import Dexie, { type EntityTable } from 'dexie'
-import { databaseId } from '@/store/main'
+// axi0-slides: the undo history and the pen drawings of a presentation live in this document's memory only. The editor
+// runs in a sandboxed frame with an opaque origin, where IndexedDB and localStorage do not exist; the page that frames
+// it keeps decks (sealed) and nothing here outlives the frame. Same calls as the Dexie tables they replace.
 import type { Slide } from '@/types/slides'
-import { LOCALSTORAGE_KEY_DISCARDED_DB } from '@/configs/storage'
 
 export interface writingBoardImg {
   id: string
@@ -14,42 +14,49 @@ export interface Snapshot {
   slides: Slide[]
 }
 
-const databaseNamePrefix = 'PPTist'
+const clone = <T>(x: T): T => JSON.parse(JSON.stringify(x))
 
-// Delete失效/过期的数据库
-// 应用Close时 (Close或刷新浏览器), 会将其数据库ID记录在 localStorage Medium, 表示该ID指向的数据库已失效
-// 当应用初始化时, 检查当前所有数据库, 将被记录失效的数据库Delete
-// 另外, 距离初始化时间超过12Small时的数据库也将被Delete (这是为了防止出现因意外未被正确Delete的库)
-export const deleteDiscardedDB = async () => {
-  const now = new Date().getTime()
-
-  const localStorageDiscardedDB = localStorage.getItem(LOCALSTORAGE_KEY_DISCARDED_DB)
-  const localStorageDiscardedDBList: string[] = localStorageDiscardedDB ? JSON.parse(localStorageDiscardedDB) : []
-
-  const databaseNames = await Dexie.getDatabaseNames()
-  const discardedDBNames = databaseNames.filter(name => {
-    if (name.indexOf(databaseNamePrefix) === -1) return false
-    
-    const [prefix, id, time] = name.split('_')
-    if (prefix !== databaseNamePrefix || !id || !time) return true
-    if (localStorageDiscardedDBList.includes(id)) return true
-    if (now - (+time) >= 1000 * 60 * 60 * 12) return true
-
-    return false
-  })
-
-  for (const name of discardedDBNames) Dexie.delete(name)
-  localStorage.removeItem(LOCALSTORAGE_KEY_DISCARDED_DB)
+class MemoryTable<T extends { id: any }> {
+  private rows: T[] = []
+  private next = 1
+  constructor(private autoIncrement: boolean) {}
+  async add(row: Omit<T, 'id'> | T) {
+    const r = clone(row) as T
+    if (this.autoIncrement) (r as any).id = this.next++
+    this.rows.push(r)
+    return r.id
+  }
+  orderBy(_key: 'id') {
+    const sorted = () => [...this.rows].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    return {
+      keys: async () => sorted().map(r => r.id),
+      toArray: async () => clone(sorted()),
+    }
+  }
+  where(key: keyof T) {
+    return { equals: (v: any) => ({ toArray: async () => clone(this.rows.filter(r => r[key] === v)) }) }
+  }
+  async update(keyOrRow: any, changes: Partial<T>) {
+    const id = keyOrRow && typeof keyOrRow === 'object' ? keyOrRow.id : keyOrRow
+    const r = this.rows.find(x => x.id === id)
+    if (!r) return 0
+    Object.assign(r, clone(changes))
+    return 1
+  }
+  async bulkDelete(ids: any[]) {
+    const drop = new Set(ids)
+    this.rows = this.rows.filter(r => !drop.has(r.id))
+  }
+  async clear() {
+    this.rows = []
+  }
 }
 
-const db = new Dexie(`${databaseNamePrefix}_${databaseId}_${new Date().getTime()}`) as Dexie & {
-  snapshots: EntityTable<Snapshot, 'id'>,
-  writingBoardImgs: EntityTable<writingBoardImg, 'id'>,
-}
+export const deleteDiscardedDB = async () => undefined
 
-db.version(1).stores({
-  snapshots: '++id',
-  writingBoardImgs: 'id',
-})
+const db = {
+  snapshots: new MemoryTable<Snapshot>(true),
+  writingBoardImgs: new MemoryTable<writingBoardImg>(false),
+}
 
 export { db }

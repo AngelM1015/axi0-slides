@@ -124,19 +124,8 @@
     </ButtonGroup>
 
     <ButtonGroup class="row" passive>
-      <Popover trigger="click" v-model:value="AIPopoverVisible" style="width: 25%;">
-        <template #content>
-          <PopoverMenuItem center @click="execAI('Polish rewrite')">Polish</PopoverMenuItem>
-          <PopoverMenuItem center @click="execAI('Expand and enrich')">Expand</PopoverMenuItem>
-          <PopoverMenuItem center @click="execAI('Condense')">Condense</PopoverMenuItem>
-        </template>
-        <CheckboxButton
-          first
-          style="width: 100%;"
-          v-tooltip="'AIAssist'"
-        ><span :class="{ 'ai-loading': isAIWriting }">{{ isAIWriting ? '' : 'AI' }}</span></CheckboxButton>
-      </Popover>
       <CheckboxButton
+        first
         style="flex: 1;"
         v-tooltip="'Clear formatting'"
         @click="emitRichTextCommand('clear')"

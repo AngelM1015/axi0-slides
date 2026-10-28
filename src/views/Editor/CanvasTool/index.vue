@@ -70,7 +70,6 @@
             <FileInput @change="files => { insertImageElement(files); imageMenuVisible = false }">
               <PopoverMenuItem center><i-icon-park-outline:upload class="icon" /> Upload image</PopoverMenuItem>
             </FileInput>
-            <PopoverMenuItem center @click="openImageLibPanel(); imageMenuVisible = false"><i-icon-park-outline:picture class="icon" /> Online gallery</PopoverMenuItem>
           </template>
           <span class="arrow"><i-icon-park-outline:down /></span>
         </Popover>
@@ -105,18 +104,6 @@
       <div class="insert-handler-item" v-tooltip="'Insert formula'" @click="latexEditorVisible = true">
         <i-icon-park-outline:formula class="icon" /> <span class="text">Formula</span>
       </div>
-      <Popover trigger="click" v-model:value="mediaInputVisible" :offset="10">
-        <template #content>
-          <MediaInput 
-            @close="mediaInputVisible = false"
-            @insertVideo="({ src, ext }) => { createVideoElement(src, ext); mediaInputVisible = false }"
-            @insertAudio="({ src, ext }) => { createAudioElement(src, ext); mediaInputVisible = false }"
-          />
-        </template>
-        <div class="insert-handler-item" v-tooltip="'Insert audio/video'">
-          <i-icon-park-outline:video-two class="icon" /> <span class="text">Audio/Video</span>
-        </div>
-      </Popover>
       <div class="insert-handler-item" :class="{ 'active': showSymbolPanel }" v-tooltip="'Insert symbol'" @click="toggleSymbolPanel()">
         <i-icon-park-outline:symbol class="icon" /> <span class="text">Symbol</span>
       </div>
@@ -184,7 +171,6 @@ import ShapePool from './ShapePool.vue'
 import LinePool from './LinePool.vue'
 import ChartPool from './ChartPool.vue'
 import TableGenerator from './TableGenerator.vue'
-import MediaInput from './MediaInput.vue'
 import SVGPathEditor from './SVGPathEditor.vue'
 import LaTeXEditor from '@/components/LaTeXEditor/index.vue'
 import FileInput from '@/components/FileInput.vue'

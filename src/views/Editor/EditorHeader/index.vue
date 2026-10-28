@@ -3,16 +3,6 @@
     <div class="left">
       <Popover trigger="click" placement="bottom-start" v-model:value="mainMenuVisible">
         <template #content>
-          <div class="main-menu">
-            <div class="ai-menu" @click="openAIPPTDialog(); mainMenuVisible = false">
-              <div class="icon"><i-custom:click /></div>
-              <div class="aippt-content">
-                <div class="aippt"><span>AIPPT</span></div>
-                <div class="aippt-subtitle">Type one line and generate a deck with AI</div>
-              </div>
-            </div>
-          </div>
-          <Divider :margin="10" />
           <div class="import-section">
             <div class="import-label">Import file</div>
             <div class="import-grid">
@@ -48,10 +38,9 @@
           <PopoverMenuItem class="popover-menu-item" @click="resetSlides(); mainMenuVisible = false"><i-icon-park-outline:refresh class="icon" /> Reset slides</PopoverMenuItem>
           <PopoverMenuItem class="popover-menu-item" @click="openMarkupPanel(); mainMenuVisible = false"><i-icon-park-outline:mark class="icon" /> Slide type label</PopoverMenuItem>
           <PopoverMenuItem class="popover-menu-item" @click="mainMenuVisible = false; hotkeyDrawerVisible = true"><i-icon-park-outline:command class="icon" /> Quick actions</PopoverMenuItem>
-          <PopoverMenuItem class="popover-menu-item" @click="goLink('https://github.com/pipipi-pikachu/PPTist/issues')"><i-icon-park-outline:comment class="icon" /> Feedback</PopoverMenuItem>
-          <PopoverMenuItem class="popover-menu-item" @click="goLink('https://github.com/pipipi-pikachu/PPTist/blob/master/doc/Q&A.md')"><i-icon-park-outline:helpcenter class="icon" /> FAQ</PopoverMenuItem>
+          <PopoverMenuItem class="popover-menu-item" @click="goLink(SOURCE_URL)"><i-icon-park-outline:github class="icon" /> Source code of this editor</PopoverMenuItem>
           <Divider :margin="10" />
-          <div class="statement">Note: this site is for testing/demo only and provides no services</div>
+          <div class="statement">A modified PPTist (© 2020-PRESENT pipipi-pikachu), AGPL-3.0</div>
         </template>
         <div class="menu-item"><i-icon-park-outline:hamburger-button class="icon" /></div>
       </Popover>
@@ -86,13 +75,10 @@
           <div class="arrow-btn"><i-icon-park-outline:down class="arrow" /></div>
         </Popover>
       </div>
-      <div class="menu-item" v-tooltip="'AIGeneratePPT'" @click="openAIPPTDialog(); mainMenuVisible = false">
-        <span class="text ai">AI</span>
-      </div>
       <div class="menu-item" v-tooltip="'Export'" @click="setDialogForExport('pptx')">
         <i-icon-park-outline:download class="icon" />
       </div>
-      <a class="github-link" v-tooltip="'Copyright © 2020-PRESENT pipipi-pikachu'" href="https://github.com/pipipi-pikachu/PPTist" target="_blank">
+      <a class="github-link" v-tooltip="'Source code (AGPL-3.0). PPTist © 2020-PRESENT pipipi-pikachu'" :href="SOURCE_URL" target="_blank" rel="noopener noreferrer" aria-label="Source code of this editor">
         <div class="menu-item"><i-icon-park-outline:github class="icon" /></div>
       </a>
     </div>
@@ -166,9 +152,7 @@ const openMarkupPanel = () => {
   mainStore.setMarkupPanelState(true)
 }
 
-const openAIPPTDialog = () => {
-  mainStore.setAIPPTDialogState(true)
-}
+const SOURCE_URL = import.meta.env.VITE_SOURCE_URL || 'https://github.com/AngelM1015/axi0-slides'
 </script>
 
 <style lang="scss" scoped>

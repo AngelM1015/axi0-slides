@@ -13,22 +13,8 @@
       <div class="menu-item" @click="changeMode('editor')"><i-icon-park-outline:edit class="icon" /> Edit</div>
       <Divider type="vertical" style="height: 30px;" />
       <div class="menu-item" @click="changeMode('player')"><i-icon-park-outline:full-screen-play class="icon" /> Play</div>
-      <Divider type="vertical" style="height: 30px;" />
-      <div class="menu-item ai" @click="openAIPPTDialog()">AIPPT</div>
     </div>
   </div>
-
-  <Modal
-    :visible="!!showAIPPTDialog" 
-    :closeOnClickMask="false"
-    :closeOnEsc="false"
-    :width="width"
-    closeButton
-    :wrapStyle="{ opacity: showAIPPTDialog === 'running' ? 0 : 1 }"
-    @closed="closeAIPPTDialog()"
-  >
-    <AIPPTDialog />
-  </Modal>
 </template>
 
 <script lang="ts" setup>
@@ -41,7 +27,6 @@ import type { Mode } from '@/types/mobile'
 import ThumbnailSlide from '@/views/components/ThumbnailSlide/index.vue'
 import Divider from '@/components/Divider.vue'
 import Modal from '@/components/Modal.vue'
-import AIPPTDialog from '../Editor/AIPPTDialog.vue'
 
 defineProps<{
   changeMode: (mode: Mode) => void
