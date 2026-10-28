@@ -3,7 +3,7 @@
 // (src/axi0/theme.scss holds the variables and their defaults). Every rule below is a plain text replacement inside
 // style code; the counts are printed at the end of a build.
 const INCLUDE = /\/src\/(views\/Editor|views\/Mobile|components|assets\/styles|views\/components\/(?!element|ThumbnailSlide))/
-const EXCLUDE = /\/src\/(views\/Editor\/Canvas|views\/Screen|views\/components\/element|views\/components\/ThumbnailSlide|components\/ColorPicker|components\/WritingBoard)/
+const EXCLUDE = /\/src\/(views\/Editor\/Canvas\/|views\/Screen|views\/components\/element|views\/components\/ThumbnailSlide|components\/ColorPicker|components\/WritingBoard)/
 const STYLE = /(\.vue\?vue&type=style[^/]*|\.s?css(\?.*)?)$/
 
 const RULES = [
