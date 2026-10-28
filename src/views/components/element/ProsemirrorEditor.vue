@@ -13,6 +13,8 @@ import { debounce } from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useKeyboardStore, useMainStore } from '@/store'
 import type { EditorView } from 'prosemirror-view'
+import { EditorState } from 'prosemirror-state'
+import type { Node as PMNode } from 'prosemirror-model'
 import { toggleMark, wrapIn, lift } from 'prosemirror-commands'
 import { initProsemirrorEditor, createDocument } from '@/utils/prosemirror'
 import { isActiveOfParentNodeType, findNodesWithSameMark, getTextAttrs, autoSelectAll, addMark, markActive, getFontsize } from '@/utils/prosemirror/utils'
@@ -98,12 +100,44 @@ const handleKeydown = (editorView: EditorView, e: KeyboardEvent) => {
 
 // 将富TextContent同步到DOM
 const textContent = computed(() => props.value)
+// axi0-slides: a text box being typed in takes changes made elsewhere (a shared deck) without losing what is typed
+// here: the change from the last content both sides had to the new one is applied over what was typed since
+let synced = props.value
+const sameHTML = (a: string, b: string) => a.replace(/ style=\"\"/g, '') === b.replace(/ style=\"\"/g, '')
+const diffStep = (a: PMNode, b: PMNode) => {
+  const start = a.content.findDiffStart(b.content)
+  if (start == null) return null
+  const end = a.content.findDiffEnd(b.content)
+  if (!end) return null
+  let { a: endA, b: endB } = end
+  const overlap = start - Math.min(endA, endB)
+  if (overlap > 0) {
+    endA += overlap
+    endB += overlap
+  }
+  return EditorState.create({ doc: a }).tr.replace(start, endA, b.slice(start, endB)).steps[0] || null
+}
 watch(textContent, () => {
   if (!editorView) return
-  if (editorView.hasFocus()) return
-
-  const { doc, tr } = editorView.state
-  editorView.dispatch(tr.replaceRangeWith(0, doc.content.size, createDocument(textContent.value)))
+  const value = textContent.value
+  if (!editorView.hasFocus()) {
+    synced = value
+    const { doc, tr } = editorView.state
+    editorView.dispatch(tr.replaceRangeWith(0, doc.content.size, createDocument(value)))
+    return
+  }
+  if (value === synced) return
+  const from = createDocument(synced)
+  synced = value
+  if (sameHTML(value, editorView.dom.innerHTML)) return
+  const theirs = diffStep(from, createDocument(value))
+  if (!theirs) return
+  const mine = diffStep(from, editorView.state.doc)
+  const step = mine ? theirs.map(mine.getMap()) : theirs
+  if (!step) return
+  const tr = editorView.state.tr
+  if (tr.maybeStep(step).failed) return
+  editorView.dispatch(tr.setMeta('addToHistory', false))
 })
 
 // 打On/CloseEdit器的Edit模式
