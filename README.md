@@ -282,3 +282,11 @@ If you wish to use this project for commercial gain, I hope you will respect ope
 - **免责声明**：作者不保证代码没有 bug，也不对使用后果负责。
 
 > 详细协议内容见官方文档：[AGPL-3.0 协议](https://www.gnu.org/licenses/agpl-3.0.html)
+
+## Built on
+
+What this repository takes from free projects and what is ours; every package and licence is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+- **[PPTist](https://github.com/pipipi-pikachu/PPTist)** commit 04e06cb, AGPL-3.0: forked: the whole editor (FORK.md dates every change). Ours: no outside requests, the postMessage bridge, the theme, English interface.
+- **[English interface (DmanADYP/PPTist)](https://github.com/DmanADYP/PPTist)** commit ae61a1c, AGPL-3.0: cherry-picked unchanged.
+- **[Instrument Sans and the Latin fonts PPTist ships](https://github.com/google/fonts)**, OFL-1.1: the editor's fonts (CJK and non-OFL fonts dropped).
