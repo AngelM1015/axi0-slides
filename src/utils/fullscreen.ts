@@ -1,7 +1,8 @@
 // Enter fullscreen
 export const enterFullscreen = () => {
   const docElm = document.documentElement
-  if (docElm.requestFullscreen) docElm.requestFullscreen() 
+  // axi0-slides: without a user gesture inside the frame the browser refuses; the slide show then fills the frame
+  if (docElm.requestFullscreen) docElm.requestFullscreen().catch(() => undefined)
   else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen() 
   else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen()
   else if (docElm.msRequestFullscreen) docElm.msRequestFullscreen()

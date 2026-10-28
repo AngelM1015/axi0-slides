@@ -7,16 +7,20 @@
 // From the page:  load { json }                 a deck (the JSON below) to show; the undo history starts again
 //                 theme { mode, vars }          'light' | 'dark' and colour values (names in VARS)
 //                 locale { locale }             a BCP 47 tag for the document language
-//                 command { name }              'present' | 'export-pptx' | 'export-dialog'
+//                 command { name }              'present' | 'exit-present' (the page holds the frame full screen)
+//                                               'export-pptx' | 'export-dialog'
+//                 import { file }               a .pptx or the editor's .json: it replaces the deck's slides
 //                 flush {}                      send what changed now (the page answers with its save)
 // To the page:    ready { version }             once, when the editor can take a deck
 //                 change { json }               the deck after an edit (at most every DEBOUNCE_MS)
 //                 flushed {}                    after a flush
+//                 screening { on }              the slide show started or ended
 //
 // A deck is upstream's own JSON export ({ title, width, height, theme, slides }) plus { v: 2, kind: 'pptist' }.
-import { useMainStore, useSlidesStore, useSnapshotStore } from '@/store'
+import { watch } from 'vue'
+import { useMainStore, useScreenStore, useSlidesStore, useSnapshotStore } from '@/store'
 import { db } from '@/utils/database'
-import useScreening from '@/hooks/useScreening'
+import useImport from '@/hooks/useImport'
 import useExport from '@/hooks/useExport'
 import { nanoid } from 'nanoid'
 
@@ -36,8 +40,9 @@ export const startBridge = () => {
   const slidesStore = useSlidesStore()
   const snapshotStore = useSnapshotStore()
   const mainStore = useMainStore()
-  const { enterScreeningFromStart } = useScreening()
+  const screenStore = useScreenStore()
   const { exportPPTX } = useExport()
+  const { importPPTXFile, importJSON } = useImport()
 
   let last = ''
   let timer = 0
@@ -110,16 +115,26 @@ export const startBridge = () => {
     if (m.type === 'load' && typeof m.json === 'string') load(m.json)
     else if (m.type === 'theme') theme(m.mode, m.vars)
     else if (m.type === 'locale' && typeof m.locale === 'string' && /^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{1,8}){0,3}$/.test(m.locale)) document.documentElement.lang = m.locale
+    else if (m.type === 'import' && loaded && m.file instanceof File) {
+      if (/\.pptx$/i.test(m.file.name)) importPPTXFile([m.file], { cover: true })
+      else if (/\.json$/i.test(m.file.name)) importJSON([m.file], true)
+    }
     else if (m.type === 'flush') {
       sendChange()
       post('flushed')
     }
     else if (m.type === 'command' && loaded) {
-      if (m.name === 'present') enterScreeningFromStart()
+      if (m.name === 'present') {
+        slidesStore.updateSlideIndex(0)
+        screenStore.setScreening(true)
+      }
+      else if (m.name === 'exit-present') screenStore.setScreening(false)
       else if (m.name === 'export-pptx') exportPPTX(slidesStore.slides, true, true)
       else if (m.name === 'export-dialog') mainStore.setDialogForExport('pptx')
     }
   })
+
+  watch(() => screenStore.screening, on => post('screening', { on }))
 
   // the last edit is not lost when the page takes the frame away
   window.addEventListener('pagehide', sendChange)
